@@ -255,7 +255,6 @@ show_help() {
     echo ""
 }
 
-# Main function
 main() {
     clear
     echo "╔════════════════════════════════════════╗"
@@ -268,7 +267,7 @@ main() {
     while true; do
         read -r -e -p "Search > " query
         
-        # Check for special commands
+        
         case "$query" in
             ":res"|":resolution")
                 set_resolution
