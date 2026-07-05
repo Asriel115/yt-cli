@@ -2,7 +2,6 @@
 
 # YouTube to mpv with fzf script
 
-# Check if required commands are available
 for cmd in fzf mpv yt-dlp; do
     if ! command -v $cmd &> /dev/null; then
         echo "Error: $cmd is not installed."
@@ -10,10 +9,10 @@ for cmd in fzf mpv yt-dlp; do
     fi
 done
 
-# Default resolution (can be changed by user)
+
 DEFAULT_RESOLUTION="1080p"
 
-# Function to set resolution
+
 set_resolution() {
     echo "Current resolution: $DEFAULT_RESOLUTION"
     echo "Select resolution:"
@@ -44,7 +43,7 @@ set_resolution() {
     echo ""
 }
 
-# Function to get mpv format string based on user preference
+
 get_format_string() {
     case "$DEFAULT_RESOLUTION" in
         "best")
@@ -77,7 +76,7 @@ get_format_string() {
     esac
 }
 
-# Function to play video with proper error handling
+
 play_video() {
     local video_url="$1"
     local format_string=$(get_format_string)
@@ -85,12 +84,12 @@ play_video() {
     echo "Attempting to play with quality: $DEFAULT_RESOLUTION"
     echo "Format string: $format_string"
     
-    # Try to play with specified format
+    
     if mpv --ytdl-format="$format_string" "$video_url" 2>/tmp/mpv_error.log; then
         return 0
     else
         echo "Failed to play with selected quality. Trying best available..."
-        # Fallback to best available quality
+      
         if mpv --ytdl-format="best" "$video_url" 2>/tmp/mpv_error.log; then
             return 0
         else
@@ -100,7 +99,6 @@ play_video() {
     fi
 }
 
-# Function to show available formats for a video
 show_formats() {
     local video_url="$1"
     echo "Available formats for this video:"
@@ -115,13 +113,11 @@ show_formats() {
     fi
 }
 
-# Function to search YouTube and display results
 youtube_search() {
     local query="$1"
     
     echo "Searching YouTube for: $query"
     
-    # Direct approach: get URLs and titles, let user select
     local selection=$(yt-dlp --no-playlist --flat-playlist \
         --print "%(title)s" \
         --print "%(webpage_url)s" \
@@ -165,19 +161,16 @@ youtube_search() {
             --bind='ctrl-r:execute(echo "CHANGE_RES")+abort' \
             --bind='ctrl-f:execute(echo "SHOW_FORMATS")+abort')
     
-    # Handle special key bindings
     if [ "$selection" = "CHANGE_RES" ]; then
         set_resolution
         return
     elif [ "$selection" = "SHOW_FORMATS" ]; then
-        # This is handled differently - we need the URL
         echo "Please select a video first, then we can show formats"
         sleep 1
         return
     fi
     
     if [ -n "$selection" ]; then
-        # Extract the URL (4th field now)
         local video_url=$(echo "$selection" | cut -f4)
         local video_title=$(echo "$selection" | cut -f1 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
         
@@ -215,7 +208,6 @@ youtube_search() {
     fi
 }
 
-# Show current settings and help
 show_help() {
     clear
     echo "========================================="
@@ -298,5 +290,4 @@ main() {
     done
 }
 
-# Run main function
 main
