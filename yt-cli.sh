@@ -12,6 +12,7 @@ done
 
 DEFAULT_RESOLUTION="1080p"
 
+SEARCH_LIMIT=50
 
 set_resolution() {
     echo "Current resolution: $DEFAULT_RESOLUTION"
@@ -123,7 +124,7 @@ youtube_search() {
         --print "%(webpage_url)s" \
         --print "%(duration)s" \
         --print "%(view_count)s" \
-        "ytsearch10:${query}" 2>/dev/null | \
+        "ytsearch${SEARCH_LIMIT}:${query}" 2>/dev/null | \
         paste - - - - | \
         awk -F'\t' '{
             # Format duration
