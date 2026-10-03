@@ -266,7 +266,7 @@ main() {
                 set_resolution
                 clear
                 echo "╔════════════════════════════════════════╗"
-                echo "║   Quality updated to: $DEFAULT_RESOLUTION              ║"
+                echo "║Quality updated to: $DEFAULT_RESOLUTION ║"
                 echo "╚════════════════════════════════════════╝"
                 echo ""
                 continue
