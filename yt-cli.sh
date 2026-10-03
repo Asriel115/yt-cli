@@ -251,8 +251,8 @@ show_help() {
 main() {
     clear
     echo "╔════════════════════════════════════════╗"
-    echo "║   YouTube MPV Player with fzf         ║"
-    echo "║   Quality: $DEFAULT_RESOLUTION                      ║"
+    echo "║   YouTube MPV Player with fzf          ║"
+    echo "║   Quality: $DEFAULT_RESOLUTION         ║"
     echo "╚════════════════════════════════════════╝"
     echo ""
     echo "Type :help for commands, or enter a search query"
