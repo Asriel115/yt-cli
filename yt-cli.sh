@@ -25,9 +25,9 @@ set_resolution() {
     echo "6) 480p"
     echo "7) 360p"
     echo "8) Audio only"
-    
+
     read -r -p "Choice (1-8): " choice
-    
+
     case $choice in
         1) DEFAULT_RESOLUTION="best" ;;
         2) DEFAULT_RESOLUTION="2160p" ;;
@@ -39,7 +39,7 @@ set_resolution() {
         8) DEFAULT_RESOLUTION="audio" ;;
         *) echo "Invalid choice, keeping current resolution: $DEFAULT_RESOLUTION" ;;
     esac
-    
+
     echo "Resolution set to: $DEFAULT_RESOLUTION"
     echo ""
 }
@@ -80,17 +80,17 @@ get_format_string() {
 
 play_video() {
     local video_url="$1"
-    local format_string=$(get_format_string)
-    
+    local "format_string"="$(get_format_string)"
+
     echo "Attempting to play with quality: $DEFAULT_RESOLUTION"
     echo "Format string: $format_string"
-    
-    
+
+
     if mpv --ytdl-format="$format_string" "$video_url" 2>/tmp/mpv_error.log; then
         return 0
     else
         echo "Failed to play with selected quality. Trying best available..."
-      
+
         if mpv --ytdl-format="best" "$video_url" 2>/tmp/mpv_error.log; then
             return 0
         else
@@ -106,7 +106,7 @@ show_formats() {
     yt-dlp --list-formats "$video_url" 2>/dev/null | grep -E "^[0-9]" | head -20
     echo ""
     read -r -p "Enter format code (or press Enter for best): " format_code
-    
+
     if [ -n "$format_code" ]; then
         mpv --ytdl-format="$format_code" "$video_url"
     else
@@ -116,10 +116,10 @@ show_formats() {
 
 youtube_search() {
     local query="$1"
-    
+
     echo "Searching YouTube for: $query"
-    
-    local selection=$(yt-dlp --no-playlist --flat-playlist \
+
+    local "selection"="$(yt-dlp --no-playlist --flat-playlist \
         --print "%(title)s" \
         --print "%(webpage_url)s" \
         --print "%(duration)s" \
@@ -136,7 +136,7 @@ youtube_search() {
             } else {
                 duration_str = "??:??"
             }
-            
+
             # Format views
             views = $4
             if (views == "NA" || views == "") {
@@ -148,7 +148,7 @@ youtube_search() {
             } else {
                 views_str = views " views"
             }
-            
+
             # Format: Title | Duration | Views | URL
             printf "%-80s\t[%s]\t%s\t%s\n", $1, duration_str, views_str, $2
         }' | \
@@ -160,8 +160,8 @@ youtube_search() {
             --prompt="Search: $query > " \
             --header="Title                                                                                  Duration  Views" \
             --bind='ctrl-r:execute(echo "CHANGE_RES")+abort' \
-            --bind='ctrl-f:execute(echo "SHOW_FORMATS")+abort')
-    
+            --bind='ctrl-f:execute(echo "SHOW_FORMATS")+abort')"
+
     if [ "$selection" = "CHANGE_RES" ]; then
         set_resolution
         return
@@ -170,11 +170,11 @@ youtube_search() {
         sleep 1
         return
     fi
-    
+
     if [ -n "$selection" ]; then
-        local video_url=$(echo "$selection" | cut -f4)
-        local video_title=$(echo "$selection" | cut -f1 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-        
+        local "video_url"="$(echo "$selection" | cut -f4)"
+        local "video_title"="$(echo "$selection" | cut -f1 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+
         echo ""
         echo "Selected: $video_title"
         echo "Quality: $DEFAULT_RESOLUTION"
@@ -185,9 +185,9 @@ youtube_search() {
         echo "  R     - Change default quality"
         echo "  C     - Cancel"
         echo ""
-        
+
         read -r -p "Choose option (Enter/F/R/C): " play_option
-        
+
         case "$play_option" in
             "F"|"f")
                 show_formats "$video_url"
@@ -259,8 +259,8 @@ main() {
 
     while true; do
         read -r -e -p "Search > " query
-        
-        
+
+
         case "$query" in
             ":res"|":resolution")
                 set_resolution
@@ -283,7 +283,7 @@ main() {
                 continue
                 ;;
         esac
-        
+
         youtube_search "$query"
         echo ""
         echo "Search again or type :help for options"
