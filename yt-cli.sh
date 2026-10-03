@@ -252,7 +252,7 @@ main() {
     clear
     echo "╔════════════════════════════════════════╗"
     echo "║   YouTube MPV Player with fzf          ║"
-    echo "║   Quality: $DEFAULT_RESOLUTION         ║"
+    echo "║                Quality: $DEFAULT_RESOLUTION          ║"
     echo "╚════════════════════════════════════════╝"
     echo ""
     echo "Type :help for commands, or enter a search query"
@@ -266,7 +266,7 @@ main() {
                 set_resolution
                 clear
                 echo "╔════════════════════════════════════════╗"
-                echo "║Quality updated to: $DEFAULT_RESOLUTION ║"
+                echo "║              Quality updated to: $DEFAULT_RESOLUTION ║"
                 echo "╚════════════════════════════════════════╝"
                 echo ""
                 continue
